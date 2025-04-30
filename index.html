@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Shorts Downloader</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        input { padding: 10px; width: 300px; margin-bottom: 10px; }
+        button { padding: 10px 20px; cursor: pointer; }
+        #message { margin-top: 20px; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+    <h1>Download YouTube Shorts</h1>
+    <input type="text" id="url" placeholder="Enter YouTube Shorts URL">
+    <br><br>
+    <button id="download-btn" onclick="downloadVideo()">Download Video</button>
+    <br><br>
+    <div id="message"></div>
+
+    <script>
+        async function downloadVideo() {
+            const url = document.getElementById('url').value;
+            if (!url) {
+                document.getElementById('message').textContent = 'Please enter a valid URL.';
+                return;
+            }
+
+            try {
+                const response = await fetch('/download', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url: url }),
+                });
+
+                const data = await response.json();
+                if (data.status === 'success') {
+                    const videoUrl = data.video_url;
+                    document.getElementById('message').textContent = 'Video ready for download!';
+                    const a = document.createElement('a');
+                    a.href = videoUrl;
+                    a.download = 'downloaded_video.mp4';
+                    a.click();
+                } else {
+                    document.getElementById('message').textContent = 'Failed to load video. Please check the URL.';
+                }
+            } catch (error) {
+                document.getElementById('message').textContent = 'Error occurred. Please try again later.';
+            }
+        }
+    </script>
+
+</body>
+</html>
