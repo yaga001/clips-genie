@@ -9,7 +9,7 @@ the file structure to make this repo run should be:
   │   └── index.html (recommemded)
   └── app.py (recommended)
 
-  also you can run
+also you can run
 
   pip install Flask yt-dlp
 
